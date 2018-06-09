@@ -4,7 +4,7 @@ let http = require('http');
 
 const router = require('./lib/router.js');
 const api = require('./api/api.js');
-
+console.log(api);
 let isRunning = false;
 
 
