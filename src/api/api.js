@@ -16,6 +16,15 @@ let sendJSON = (res,data) => {
   res.end();
 };
 
+let sendDeleted = (res,data) => {
+  // let deleteMessage = {message:'id deleted'};
+  res.statusCode = 204;
+  res.statusMessage = 'ID deleted';
+  res.setHeader('Content-Type', 'application/json');
+  res.write(data);
+  res.end();
+};
+
 let serverError = (res,err) => {
   let error = { error:err };
   res.statusCode = 500;
@@ -70,24 +79,19 @@ router.get('/', (req,res) => {
 });
 
 
-router.delete('/api/v1/notes', (req,res) => {
-  if ( req.query.id ) {
-    Notes.deleteOne(req.query.id)
-      .then( success => {
-        let data = {id:req.query.id,deleted:success};
-        sendJSON(res,data);
-      })
-      .catch(console.error);
-  }
-});
 
 router.post('/api/v1/notes', (req,res) => {
-
-  let record = new Notes(req.body);
-  record.save()
-    .then(data => sendJSON(res,data))
-    .catch(console.error);
-
+  if(!req.body){
+    console.log('no body', req.body);
+    routesErrorId(res);
+  }
+  else{
+    let record = new Notes(req.body);
+    record.save()
+      .then(data => sendJSON(res,data))
+      .catch('post catch', console.error);
+  }
+  
 });
 
 router.put('/api/v1/notes', (req,res) => {
@@ -100,5 +104,19 @@ router.put('/api/v1/notes', (req,res) => {
       .catch(console.error);
   }
 });
+
+router.delete('/api/v1/notes', (req,res) => {
+  if (req.query.id) { 
+    Notes.deleteOne(req.query.id)
+      .then( success => {
+        let data = {id:req.query.id,updated:success};
+        sendDeleted(res,data);
+      })
+      .catch( err => {
+        routesError(res,err);} );
+  }
+  
+});
+
 
 module.exports = {};

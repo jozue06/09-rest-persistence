@@ -1,30 +1,70 @@
 const superagent = require('superagent');
 require('/Users/joshuamcclung/codefellows/401/09-rest-persistence/src/api/api.js');
+const app = require('/Users/joshuamcclung/codefellows/401/09-rest-persistence/src/app.js');
+
+
+/*
+## Tests
+* write a test to ensure that your api returns a status code of 404 for routes that have not been registered
+* write tests to ensure the `/api/simple-resource-name` endpoint responds as described for each condition below:
+
+ * `GET`: test 404, it should respond with 'not found' for valid requests made with an id that was not found
+ * `GET`: test 400, it should respond with 'bad request' if no id was provided in the request
+ * `GET`: test 200, it should contain a response body for a request made with a valid id
+ * `POST`: test 400, it should respond with 'bad request' if no request body was provided or the body was invalid
+ * `POST`: test 200, it should respond with the body content for a post request with a valid body
+ * 
+
+*/
 
 describe('app',() =>{
 
-  it('should post a note with id', () =>{
+  beforeAll( () => {
+    app.start(3300);
+  });
+
+  afterAll( ()=>{
+
+    app.stop();
+  });
+
+  it('should post a new note with the body, and get back that note with a specific id', () => {
     let obj = {
       content: 'freds name', 
       title: 'Fred'};
-    let expected;
+    // let expected;
     return superagent
-      .post('http://localhost:3333/api/v1/notes')
+      .post('http://localhost:3300/api/v1/notes')
       .send(obj)
-      .then(data => expect(expected).toEqual(data.body.id))
 
-      .catch(err => {return err;});
+      .then(data =>
+      {
+        let returns = data.body.id;//?
+        return superagent
+          .get(`http://localhost:3300/api/v1/notes?id=${returns}`)//?
+          .then(data => {
+            console.log(data.body.id);
+            console.log(returns);
+            expect(data.body.id).toEqual(returns);//?
+          } )
+          .catch(err => {return err;});
+      });
+
   });
 
-
-  it('should get back a note with specific id', () => {
-
+  it('should return error for post 400', () => {
+    console.log('400 test');
+    let obj;
     return superagent
-      .get('http://localhost:3333/api/v1/notes?id=')
-      .then(data => {
-        expect(data.statusCode).toBe(404);
-      } )
-      .catch(err => {return err;});
+      .post('http://localhost:3300/api/v1/notes')
+      .send(obj)
+      .then(res => {
+        console.log(res.statusCode) ;
+        expect(res.statusCode).toEqual(400);
+      })
+      .catch(err => {
+       
+        return err;});
   });
 
 

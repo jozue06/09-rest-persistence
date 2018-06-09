@@ -57,6 +57,7 @@ class Note{
   }
 
   static deleteOne(id) {
+    console.log('pre deleted');
     return storage.delete(id);
   }
 
