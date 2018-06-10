@@ -22,7 +22,11 @@ router.route = (req,res) => {
 
   return parser(req)
     .then(req => {
-    
+      if(!req.body){
+        console.error('bad request', req.parsed.pathname);
+        res.statusCode = 400;
+        res.statusMessage = 'bad request';
+      }
       let handler = router.routes[req.method][req.parsed.pathname];
       if (handler) {
         return handler(req,res);

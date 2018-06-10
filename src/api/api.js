@@ -81,7 +81,7 @@ router.get('/', (req,res) => {
 
 
 router.post('/api/v1/notes', (req,res) => {
-  if(!req.body){
+  if(!req.body || req.body === {} || !req.body.id){
     console.log('no body', req.body);
     routesErrorId(res);
   }
