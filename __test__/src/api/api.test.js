@@ -1,6 +1,6 @@
 const superagent = require('superagent');
-require(`/Users/joshuamcclung/codefellows/401/09-rest-persistence/src/api/api.js`);
-const app = require('/Users/joshuamcclung/codefellows/401/09-rest-persistence/src/app.js');
+require(`./09-rest-persistence/src/api/api.js`);
+const app = require('./09-rest-persistence/src/app.js');
 
 
 /*
