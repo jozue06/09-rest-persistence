@@ -1,7 +1,6 @@
 const superagent = require('superagent');
-require('../../../src/api/api.js');
+require('../../../src/api/api.js'); 
 const app = require('../../../src/app.js');
-
 
 /*
 ## Tests
