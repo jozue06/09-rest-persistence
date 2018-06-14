@@ -44,9 +44,9 @@ describe('app',() =>{
         return superagent
           .get(`http://localhost:3300/api/v1/notes?id=${returns}`)//?
           .then(data => {
-            // console.log(data.body.id);
-            // console.log(returns);
-            expect(data.body.id).toEqual(returns);//?
+            console.log(data.body.id);
+            console.log(returns);
+            expect(data.body.id).toEqual('hkjhkljh');//?
           } )
           .catch(err => {return err;});
       });
@@ -57,15 +57,15 @@ describe('app',() =>{
 
   it('should return error for post 400', () => {
     let obj = {};
-    return superagent
+    superagent
       .post('http://localhost:3300/api/v1/notes')
       .send(obj)
       .then(res => {
         console.log(res.statusCode);
-        expect(res.statusCode).toEqual('3');
+        expect(res.statusCode).toEqual(400);
       })
       .catch(err => {
-       
+        
         return err;});
   });
 
